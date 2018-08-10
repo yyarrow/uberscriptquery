@@ -61,9 +61,9 @@ public class WriteJdbcActionStatementExecutor implements ActionStatementExecutor
             postWriteSql = actionStatement.getParamValues().get(9).getValue().toString();
         }
 
-        List<String> primaryKeys = primaryKeysStr.isEmpty() ? new ArrayList<>() : Arrays.asList(primaryKeysStr.split(","));
-        List<String> indexColumns = indexColumnsStr.isEmpty() ? new ArrayList<>() : Arrays.asList(indexColumnsStr.split(","));
-        List<String> textColumns = textColumnsStr.isEmpty() ? new ArrayList<>() : Arrays.asList(textColumnsStr.split(","));
+        List<String> primaryKeys = primaryKeysStr.isEmpty() ? new ArrayList<String>() : Arrays.asList(primaryKeysStr.split(","));
+        List<String> indexColumns = indexColumnsStr.isEmpty() ? new ArrayList<String>() : Arrays.asList(indexColumnsStr.split(","));
+        List<String> textColumns = textColumnsStr.isEmpty() ? new ArrayList<String>() : Arrays.asList(textColumnsStr.split(","));
 
         SaveMode saveMode = SaveMode.valueOf(saveModeStr);
 

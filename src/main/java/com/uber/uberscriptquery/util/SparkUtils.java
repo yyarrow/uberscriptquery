@@ -33,6 +33,7 @@ import scala.Tuple2;
 
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 public class SparkUtils {
     public final static String HDFS_PREFIX_LOWERCASE = "hdfs://";
@@ -67,14 +68,20 @@ public class SparkUtils {
     // There is always issue like following when use spark.read().format("jdbc").options(jdbcMap).load(), so we write our own to load data from jdbc.
     // 16/09/20 00:16:19 ERROR yarn.ApplicationMaster: User class threw exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '...' at line 1
     // com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT city_name FROM dataquerier.fifo_supplies_01 WHERE 1=0' at line 1
-    public static Dataset<Row> readJdbc(String jdbcUrlWithPassword, String sql, SparkSession spark) {
+    public static Dataset<Row> readJdbc(final String jdbcUrlWithPassword, final String sql, SparkSession spark) {
+        final Callable c = new Callable<Tuple2<List<Row>, StructType>>(){
+            @Override
+            public Tuple2<List<Row>, StructType> call() throws Exception{
+                return readJdbcAndReturnRowsAndSchema(jdbcUrlWithPassword, sql);
+            }
+        };
         JavaRDD<Tuple2<List<Row>, StructType>> javaRdd1 = JavaSparkContext.fromSparkContext(spark.sparkContext())
                 .parallelize(Arrays.asList(0))
                 .map(new Function<Integer, Tuple2<List<Row>, StructType>>() {
                     @Override
                     public Tuple2<List<Row>, StructType> call(Integer v1) throws Exception {
                         Tuple2<List<Row>, StructType> tuple = new ExponentialBackoffRetryPolicy<Tuple2<List<Row>, StructType>>(3, 100)
-                                .attempt(() -> readJdbcAndReturnRowsAndSchema(jdbcUrlWithPassword, sql));
+                                .attempt(c);
                         return tuple;
                     }
                 });

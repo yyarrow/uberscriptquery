@@ -39,6 +39,8 @@ public class QueryTemplateParser {
 
         final char[] charArrayUpperCase = text.toUpperCase().toCharArray();
 
+        final Map<String, Object> innerVariableOverwrite = variableOverwrite;
+
         final QueryTemplateParseResult parsedResult = new QueryTemplateParseResult();
 
         UberScriptQueryTemplateLexer l = new UberScriptQueryTemplateLexer(new ANTLRInputStream(charArrayUpperCase, charArrayUpperCase.length));
@@ -68,8 +70,8 @@ public class QueryTemplateParser {
 
                         String variableName = getMatchedString(ctx.variableAssignment_variableName(), charArray);
 
-                        if (variableOverwrite != null && variableOverwrite.containsKey(variableName)) {
-                            logger.info(String.format("Ignored variable %s because of variable overwrite with value %s", variableName, variableOverwrite.get(variableName)));
+                        if (innerVariableOverwrite != null && innerVariableOverwrite.containsKey(variableName)) {
+                            logger.info(String.format("Ignored variable %s because of variable overwrite with value %s", variableName, innerVariableOverwrite.get(variableName)));
                             return;
                         }
 

@@ -15,7 +15,7 @@
         <scala.version>2.11.8</scala.version>
         <spark.version>2.0.0</spark.version>
         <hadoop.version>2.6.0</hadoop.version>
-        <java.version>1.8</java.version>
+        <java.version>1.7</java.version>
         <encoding>UTF-8</encoding>
     </properties>
 
@@ -49,21 +49,21 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-reflect</artifactId>
             <version>${scala.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -94,7 +94,7 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -119,7 +119,7 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -144,7 +144,7 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -165,7 +165,7 @@
                     <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -186,7 +186,7 @@
                     <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -203,7 +203,7 @@
                     <artifactId>commons-beanutils-core</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -258,7 +258,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.189</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>log4j</groupId>

@@ -58,6 +58,7 @@ public class QueryEngine implements Serializable {
         actionStatementExecutors.put(WriteJsonFileActionStatementExecutor.ACTION_NAME, new WriteJsonFileActionStatementExecutor());
         actionStatementExecutors.put(WriteParquetFileActionStatementExecutor.ACTION_NAME, new WriteParquetFileActionStatementExecutor());
         actionStatementExecutors.put(SendMailGunEmailActionStatementExecutor.ACTION_NAME, new SendMailGunEmailActionStatementExecutor());
+        actionStatementExecutors.put(PrintInfoActionStatementExecutor.ACTION_NAME, new PrintInfoActionStatementExecutor());
     }
 
     private static Dataset<Row> generateData_week_timepoints_by_10_minutes(SparkSession spark) {
@@ -165,10 +166,11 @@ public class QueryEngine implements Serializable {
                 Dataset<Row> df;
                 if (statementAssignment.getQueryType() == null) {
                     logger.info("Running query by spark sql: " + statementAssignment.getQueryText());
+                    //对spark的语句采用直接提交的方式
                     df = spark.sql(statementAssignment.getQueryText());
                 } else if (statementAssignment.getQueryType().equalsIgnoreCase("SQL")) {
                     logger.info("Running query by SQL: " + statementAssignment);
-
+                    //对sql语句 反而会做解析
                     SqlInputStatementExecutor sqlInputStatementExecutor = sqlInputStatementExecutors.get(statementAssignment.getQueryEngine().toLowerCase());
                     if (sqlInputStatementExecutor == null) {
                         throw new RuntimeException("Not supported sql query engine: " + statementAssignment.getQueryEngine());
