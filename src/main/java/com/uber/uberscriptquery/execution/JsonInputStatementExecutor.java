@@ -16,6 +16,7 @@
 
 package com.uber.uberscriptquery.execution;
 
+import com.uber.uberscriptquery.antlr4.parsing.StanderStatementAssigment;
 import com.uber.uberscriptquery.antlr4.parsing.StatementAssignment;
 import com.uber.uberscriptquery.util.CredentialProvider;
 import org.apache.spark.sql.Dataset;
@@ -23,5 +24,5 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public interface JsonInputStatementExecutor {
-    Dataset<Row> execute(SparkSession sparkSession, StatementAssignment statementAssignment, CredentialProvider credentialManager);
+    Dataset<Row> execute(SparkSession sparkSession, StanderStatementAssigment standerStatementAssigment, CredentialProvider credentialManager);
 }

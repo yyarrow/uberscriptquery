@@ -16,21 +16,24 @@
 
 package com.uber.uberscriptquery.antlr4.parsing;
 
+import com.uber.uberscriptquery.util.SqlType;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class StatementAssignment implements java.io.Serializable {
-    public static final String QUERY_CONFIG_CONNECTION_STRING = "connectionString";
-    public static final String QUERY_CONFIG_PASSWORD_FILE = "passwordFile";
-    public static final String QUERY_CONFIG_PASSWORD_ENTRY = "passwordEntry";
+public abstract class StatementAssignment implements java.io.Serializable {
+    protected String tableAlias;
+    protected String queryType;
+    protected String queryEngine;
+    protected String queryText;
+    protected SqlType sqlType;
 
-    private String tableAlias;
-    private String queryType;
-    private String queryEngine;
-    private String queryText;
-
-    private Map<String, String> queryConfig = new HashMap<>();
-    private String queryStatement;
+    public boolean check(){
+        // only spark(when queryType not defined) support udf
+        if(this.queryType != null && this.sqlType == SqlType.UDF)
+            return false;
+        return true;
+    }
 
     public String getTableAlias() {
         return tableAlias;
@@ -64,31 +67,7 @@ public class StatementAssignment implements java.io.Serializable {
         this.queryText = queryText;
     }
 
-    public Map<String, String> getQueryConfig() {
-        return queryConfig;
-    }
-
-    public void setQueryConfig(Map<String, String> queryConfig) {
-        this.queryConfig = queryConfig;
-    }
-
-    public String getQueryStatement() {
-        return queryStatement;
-    }
-
-    public void setQueryStatement(String queryStatement) {
-        this.queryStatement = queryStatement;
-    }
-
-    @Override
-    public String toString() {
-        return "StatementAssignment{" +
-                "tableAlias='" + tableAlias + '\'' +
-                ", queryType='" + queryType + '\'' +
-                ", queryEngine='" + queryEngine + '\'' +
-                ", queryText='" + queryText + '\'' +
-                ", queryConfig=" + queryConfig +
-                ", queryStatement='" + queryStatement + '\'' +
-                '}';
+    public SqlType getSqlType(){
+        return this.sqlType;
     }
 }

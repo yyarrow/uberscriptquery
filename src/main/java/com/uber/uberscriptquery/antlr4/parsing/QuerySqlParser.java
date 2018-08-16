@@ -16,13 +16,15 @@
 
 package com.uber.uberscriptquery.antlr4.parsing;
 
-import com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlBaseListener;
-import com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlLexer;
+import com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlBaseListener;
+import com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlLexer;
 import org.antlr.v4.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class QuerySqlParser {
@@ -78,8 +80,8 @@ public class QuerySqlParser {
 
         final RootStatement rootStatement = new RootStatement();
 
-        UberScriptQuerySqlLexer l = new UberScriptQuerySqlLexer(new ANTLRInputStream(charArrayUpperCase, charArrayUpperCase.length));
-        com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser p = new com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser(new CommonTokenStream(l));
+        JdScriptQuerySqlLexer l = new JdScriptQuerySqlLexer(new ANTLRInputStream(charArrayUpperCase, charArrayUpperCase.length));
+        com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser p = new com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser(new CommonTokenStream(l));
         p.addErrorListener(new BaseErrorListener() {
             @Override
             public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -90,15 +92,15 @@ public class QuerySqlParser {
         });
 
         p.addParseListener(
-                new UberScriptQuerySqlBaseListener() {
+                new JdScriptQuerySqlBaseListener() {
                     @Override
-                    public void enterFileAssignment(com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.FileAssignmentContext ctx) {
+                    public void enterFileAssignment(com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.FileAssignmentContext ctx) {
                         FileAssignment fileAssignment = new FileAssignment();
                         rootStatement.getFileAssignments().add(fileAssignment);
                     }
 
                     @Override
-                    public void exitFileAssignment(com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.FileAssignmentContext ctx) {
+                    public void exitFileAssignment(com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.FileAssignmentContext ctx) {
                         FileAssignment fileStatement = rootStatement.getFileAssignments().get(rootStatement.getFileAssignments().size() - 1);
                         String tableAlias = getMatchedString(ctx.fileAssignment_tableAlias(), charArray);
                         String fileType = getMatchedString(ctx.fileAssignment_fileType(), charArray);
@@ -109,14 +111,38 @@ public class QuerySqlParser {
                     }
 
                     @Override
-                    public void enterStatementAssignment(com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.StatementAssignmentContext ctx) {
-                        StatementAssignment statementAssignment = new StatementAssignment();
-                        rootStatement.getStatementAssignments().add(statementAssignment);
-                    }
-
-                    @Override
-                    public void exitStatementAssignment(com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.StatementAssignmentContext ctx) {
-                        StatementAssignment inputStatement = rootStatement.getStatementAssignments().get(rootStatement.getStatementAssignments().size() - 1);
+                    public void exitStatementAssignment(com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.StatementAssignmentContext ctx) {
+                        StatementAssignment inputStatement = null;
+                        if(ctx.statementAssignment_query().statementAssignment_udf() == null) {
+                            //stander sql
+                            StanderStatementAssigment standerInputStatement = new StanderStatementAssigment();
+                            if (ctx.statementAssignment_query().configSetting() != null) {
+                                for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.ConfigSettingContext configSettingContext : ctx.statementAssignment_query().configSetting()) {
+                                    String settingName = getMatchedString(configSettingContext.qualifiedName(), charArray);
+                                    String settingValue = getMatchedString(configSettingContext.constant(), charArray);
+                                    settingValue = ParserUtils.getStringStatementInnerValue(settingValue);
+                                    standerInputStatement.getQueryConfig().put(settingName, settingValue);
+                                }
+                            }
+                            standerInputStatement.setQueryStatement(getMatchedString(ctx.statementAssignment_query().statement(), charArray));
+                            inputStatement = standerInputStatement;
+                        }else{
+                            //udf sql
+                            UdfStatementAssigment udfInputStatement = new UdfStatementAssigment();
+                            inputStatement = udfInputStatement;
+                            String sourceTableAlias = getMatchedString(ctx.statementAssignment_query().statementAssignment_tableAlias(), charArray);
+                            String udfName = getMatchedString(ctx.statementAssignment_query().statementAssignment_udf(), charArray);
+                            List<String> paramList = new ArrayList<>();
+                            if(ctx.statementAssignment_query().statementAssignment_param() != null){
+                                for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.StatementAssignment_paramContext paramContext : ctx.statementAssignment_query().statementAssignment_param()){
+                                    paramList.add(getMatchedString(paramContext, charArray));
+                                }
+                            }
+                            udfInputStatement.setSourceTableAlias(sourceTableAlias);
+                            udfInputStatement.setUdfName(udfName);
+                            udfInputStatement.setParams(paramList);
+                            inputStatement = udfInputStatement;
+                        }
                         String tableAlias = getMatchedString(ctx.statementAssignment_tableAlias(), charArray);
                         String queryType = getMatchedString(ctx.statementAssignment_queryType(), charArray);
                         String queryEngine = getMatchedString(ctx.statementAssignment_queryEngine(), charArray);
@@ -127,30 +153,24 @@ public class QuerySqlParser {
                         inputStatement.setQueryEngine(queryEngine);
                         inputStatement.setQueryText(queryText);
 
-                        if (ctx.statementAssignment_query().configSetting() != null) {
-                            for (com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.ConfigSettingContext configSettingContext : ctx.statementAssignment_query().configSetting()) {
-                                String settingName = getMatchedString(configSettingContext.qualifiedName(), charArray);
-                                String settingValue = getMatchedString(configSettingContext.constant(), charArray);
-                                settingValue = ParserUtils.getStringStatementInnerValue(settingValue);
-                                inputStatement.getQueryConfig().put(settingName, settingValue);
-                            }
+                        if(!inputStatement.check()){
+                            throw new RuntimeException("Error: queryType:"+queryType+" can't use udf");
                         }
-
-                        inputStatement.setQueryStatement(getMatchedString(ctx.statementAssignment_query().statement(), charArray));
+                        rootStatement.getStatementAssignments().add(inputStatement);
                     }
 
                     @Override
-                    public void exitTableIdentifier(com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.TableIdentifierContext ctx) {
+                    public void exitTableIdentifier(com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.TableIdentifierContext ctx) {
                         String str = getMatchedString(ctx.table, charArray);
                         rootStatement.getTableReferenceCount().increase(str);
                     }
                 });
 
-        com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.RootContext rootContext = p.root();
+        com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.RootContext rootContext = p.root();
 
         if (rootContext.jsonQueryStatementAssignment() != null) {
-            for (com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.JsonQueryStatementAssignmentContext jsonQueryStatementAssignmentContext : rootContext.jsonQueryStatementAssignment()) {
-                StatementAssignment jsonQueryStatementAssignment = new StatementAssignment();
+            for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.JsonQueryStatementAssignmentContext jsonQueryStatementAssignmentContext : rootContext.jsonQueryStatementAssignment()) {
+                StanderStatementAssigment jsonQueryStatementAssignment = new StanderStatementAssigment();
 
                 String tableAlias = getMatchedString(jsonQueryStatementAssignmentContext.statementAssignment_tableAlias(), charArray);
                 String queryType = "JSON";
@@ -165,7 +185,7 @@ public class QuerySqlParser {
                 jsonQueryStatementAssignment.setQueryStatement(queryStatement);
 
                 if (jsonQueryStatementAssignmentContext.jsonQueryStatementAssignment_query().configSetting() != null) {
-                    for (com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.ConfigSettingContext configSettingContext : jsonQueryStatementAssignmentContext.jsonQueryStatementAssignment_query().configSetting()) {
+                    for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.ConfigSettingContext configSettingContext : jsonQueryStatementAssignmentContext.jsonQueryStatementAssignment_query().configSetting()) {
                         String settingName = getMatchedString(configSettingContext.qualifiedName(), charArray);
                         String settingValue = getMatchedString(configSettingContext.constant(), charArray);
                         settingValue = ParserUtils.getStringStatementInnerValue(settingValue);
@@ -178,14 +198,14 @@ public class QuerySqlParser {
         }
 
         if (rootContext.actionStatement() != null) {
-            for (com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.ActionStatementContext actionStatementContext : rootContext.actionStatement()) {
+            for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.ActionStatementContext actionStatementContext : rootContext.actionStatement()) {
                 String name = getMatchedString(actionStatementContext.qualifiedName(), charArray);
 
                 ActionStatement actionStatement = new ActionStatement();
                 actionStatement.setFunctionName(name);
 
                 if (actionStatementContext.actionStatement_param() != null) {
-                    for (com.uber.uberscriptquery.antlr4.generated.UberScriptQuerySqlParser.ActionStatement_paramContext paramContext : actionStatementContext.actionStatement_param()) {
+                    for (com.uber.uberscriptquery.antlr4.generated.JdScriptQuerySqlParser.ActionStatement_paramContext paramContext : actionStatementContext.actionStatement_param()) {
                         if (paramContext.STRING() != null) {
                             ValueType valueType = ValueType.String;
                             String value = getMatchedString(paramContext.STRING().getSymbol(), charArray);

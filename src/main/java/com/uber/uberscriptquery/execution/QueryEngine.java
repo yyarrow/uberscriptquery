@@ -20,6 +20,7 @@ import com.uber.uberscriptquery.antlr4.parsing.*;
 import com.uber.uberscriptquery.util.CredentialProvider;
 import com.uber.uberscriptquery.util.DummyCredentialProvider;
 import com.uber.uberscriptquery.util.SparkUtils;
+import com.uber.uberscriptquery.util.SqlType;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -153,7 +154,7 @@ public class QueryEngine implements Serializable {
                     throw new RuntimeException("Not supported json query engine: " + statementAssignment.getQueryEngine());
                 }
 
-                Dataset<Row> df = jsonInputStatementExecutor.execute(spark, statementAssignment, this.credentialManager);
+                Dataset<Row> df = jsonInputStatementExecutor.execute(spark, (StanderStatementAssigment) statementAssignment, this.credentialManager);
                 logger.info("Finished query statement: " + statementAssignment);
 
                 processAndRegisterTempTable(df, rootStatement, statementAssignment.getTableAlias(), statementAssignment.toString(), debug);
@@ -167,7 +168,14 @@ public class QueryEngine implements Serializable {
                 if (statementAssignment.getQueryType() == null) {
                     logger.info("Running query by spark sql: " + statementAssignment.getQueryText());
                     //对spark的语句采用直接提交的方式
-                    df = spark.sql(statementAssignment.getQueryText());
+                    if(statementAssignment.getSqlType() == SqlType.STANDER)
+                        df = spark.sql(statementAssignment.getQueryText());
+                    else if(statementAssignment.getSqlType() == SqlType.UDF){
+                        UdfSqlInpuStatementExecutor udfSqlInpuStatementExecutor = new UdfSqlInpuStatementExecutor();
+                        df = udfSqlInpuStatementExecutor.execute(spark, (UdfStatementAssigment)statementAssignment);
+                    }else{
+                        throw new RuntimeException("Un supported sql query");
+                    }
                 } else if (statementAssignment.getQueryType().equalsIgnoreCase("SQL")) {
                     logger.info("Running query by SQL: " + statementAssignment);
                     //对sql语句 反而会做解析
@@ -176,8 +184,9 @@ public class QueryEngine implements Serializable {
                         throw new RuntimeException("Not supported sql query engine: " + statementAssignment.getQueryEngine());
                     }
 
-                    df = sqlInputStatementExecutor.execute(spark, statementAssignment, this.credentialManager);
+                    df = sqlInputStatementExecutor.execute(spark, (StanderStatementAssigment) statementAssignment, this.credentialManager);
                 } else if (statementAssignment.getQueryType().equalsIgnoreCase("JSON")) {
+                    //目前来看似乎并不支持
                     logger.info("Running query by JSON: " + statementAssignment);
 
                     JsonInputStatementExecutor jsonInputStatementExecutor = jsonInputStatementExecutors.get(statementAssignment.getQueryEngine().toLowerCase());
@@ -185,7 +194,7 @@ public class QueryEngine implements Serializable {
                         throw new RuntimeException("Not supported json query engine: " + statementAssignment.getQueryEngine());
                     }
 
-                    df = jsonInputStatementExecutor.execute(spark, statementAssignment, this.credentialManager);
+                    df = jsonInputStatementExecutor.execute(spark, (StanderStatementAssigment) statementAssignment, this.credentialManager);
                 } else if (statementAssignment.getQueryType().equalsIgnoreCase("datagen")) {
                     logger.info("Running datagen: " + statementAssignment);
                     if (statementAssignment.getQueryEngine().equalsIgnoreCase(DATAGEN_week_timepoints_by_10_minutes)) {

@@ -16,6 +16,7 @@
 
 package com.uber.uberscriptquery.execution;
 
+import com.uber.uberscriptquery.antlr4.parsing.StanderStatementAssigment;
 import com.uber.uberscriptquery.antlr4.parsing.StatementAssignment;
 import com.uber.uberscriptquery.util.CredentialProvider;
 import com.uber.uberscriptquery.util.SparkUtils;
@@ -31,12 +32,12 @@ public class JdbcSqlInputStatementExecutor implements SqlInputStatementExecutor 
     private static final Logger logger = LoggerFactory.getLogger(JdbcSqlInputStatementExecutor.class);
 
     @Override
-    public Dataset<Row> execute(SparkSession sparkSession, StatementAssignment statementAssignment, CredentialProvider credentialManager) {
+    public Dataset<Row> execute(SparkSession sparkSession, StanderStatementAssigment statementAssignment, CredentialProvider credentialManager) {
         logger.info("Running query by sql jdbc: " + statementAssignment);
         Map<String, String> queryConfig = statementAssignment.getQueryConfig();
-        String connectionString = queryConfig.get(StatementAssignment.QUERY_CONFIG_CONNECTION_STRING);
-        String passwordFile = queryConfig.get(StatementAssignment.QUERY_CONFIG_PASSWORD_FILE);
-        String passwordEntry = queryConfig.get(StatementAssignment.QUERY_CONFIG_PASSWORD_ENTRY);
+        String connectionString = queryConfig.get(StanderStatementAssigment.QUERY_CONFIG_CONNECTION_STRING);
+        String passwordFile = queryConfig.get(StanderStatementAssigment.QUERY_CONFIG_PASSWORD_FILE);
+        String passwordEntry = queryConfig.get(StanderStatementAssigment.QUERY_CONFIG_PASSWORD_ENTRY);
         String password = credentialManager.getPassword(passwordFile, passwordEntry);
         if (password != null) {
             connectionString = connectionString.replace("[password]", password);
