@@ -124,11 +124,11 @@ public class QueryEngine implements Serializable {
         actionStatementExecutors.put(name, executor);
     }
 
-    public void executeScript(String query, SparkSession spark) {
+    public void executeScript(String query, SparkSession spark) throws RuntimeException {
         executeScript(query, null, spark, false);
     }
 
-    public void executeScript(String query, String queryOverwrite, SparkSession spark, boolean debug) {
+    public void executeScript(String query, String queryOverwrite, SparkSession spark, boolean debug) throws RuntimeException{
         QuerySqlParser parser = new QuerySqlParser();
 
         logger.info("Parsing query statement: " + query);
@@ -172,7 +172,7 @@ public class QueryEngine implements Serializable {
                         df = spark.sql(statementAssignment.getQueryText());
                     else if(statementAssignment.getSqlType() == SqlType.UDF){
                         UdfSqlInpuStatementExecutor udfSqlInpuStatementExecutor = new UdfSqlInpuStatementExecutor();
-                        df = udfSqlInpuStatementExecutor.execute(spark, (UdfStatementAssigment)statementAssignment);
+                        df = udfSqlInpuStatementExecutor.execute(spark, (UdfStatementAssigment) statementAssignment);
                     }else{
                         throw new RuntimeException("Un supported sql query");
                     }

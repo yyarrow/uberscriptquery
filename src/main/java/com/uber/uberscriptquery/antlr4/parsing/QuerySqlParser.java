@@ -129,7 +129,6 @@ public class QuerySqlParser {
                         }else{
                             //udf sql
                             UdfStatementAssigment udfInputStatement = new UdfStatementAssigment();
-                            inputStatement = udfInputStatement;
                             String sourceTableAlias = getMatchedString(ctx.statementAssignment_query().statementAssignment_tableAlias(), charArray);
                             String udfName = getMatchedString(ctx.statementAssignment_query().statementAssignment_udf(), charArray);
                             List<String> paramList = new ArrayList<>();

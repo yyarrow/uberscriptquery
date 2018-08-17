@@ -122,8 +122,8 @@ public class JdScriptQuerySqlParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "';'", "'SQL'", "'DATAGEN'", "'EXLUDE'", "'FILTER'", "'FILE'", "'('", 
-		"')'", "','", "'{'", "'}'", "'['", "']'", "':'", "'.'", null, "'JSON'", 
+		null, "';'", "'SQL'", "'DATAGEN'", "'EXCLUDE'", "'FILTER'", "'FILE'", 
+		"'('", "')'", "','", "'{'", "'}'", "'['", "']'", "':'", "'.'", null, "'JSON'", 
 		"'TEXT'", "'CSV'", "'PARQUET'", "'SELECT'", "'FROM'", "'ADD'", "'AS'", 
 		"'ALL'", "'DISTINCT'", "'WHERE'", "'GROUP'", "'BY'", "'GROUPING'", "'SETS'", 
 		"'CUBE'", "'ROLLUP'", "'ORDER'", "'HAVING'", "'LIMIT'", "'AT'", "'OR'", 
@@ -300,7 +300,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(227);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					setState(225);
@@ -784,7 +784,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(282);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
-				while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
@@ -4747,7 +4747,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(864);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,94,_ctx);
-				while ( _alt!=1 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
@@ -4908,7 +4908,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(911);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,102,_ctx);
-				while ( _alt!=1 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
@@ -4934,7 +4934,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(919);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,103,_ctx);
-				while ( _alt!=1 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
@@ -4958,7 +4958,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(926);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,104,_ctx);
-				while ( _alt!=1 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
@@ -4990,7 +4990,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(934);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,105,_ctx);
-				while ( _alt!=1 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
@@ -8357,7 +8357,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1430);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,164,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -8943,7 +8943,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(1517);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,182,_ctx);
-				while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
@@ -9063,7 +9063,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1542);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,188,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -9081,7 +9081,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1548);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,189,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -9167,7 +9167,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1558);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,190,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -9452,7 +9452,7 @@ public class JdScriptQuerySqlParser extends Parser {
 				setState(1622);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,200,_ctx);
-				while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
@@ -9624,7 +9624,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1651);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,205,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -10183,7 +10183,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1729);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,217,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -10775,7 +10775,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1806);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,232,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -11458,7 +11458,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1891);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,248,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -11687,7 +11687,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1915);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,251,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -12365,7 +12365,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(1992);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,262,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -13051,7 +13051,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(2085);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,274,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -13306,7 +13306,7 @@ public class JdScriptQuerySqlParser extends Parser {
 					setState(2098); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,275,_ctx);
-				} while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER );
+				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
 				break;
 			}
@@ -13573,7 +13573,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(2114);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,277,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -13980,7 +13980,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(2171);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,286,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -14179,7 +14179,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(2194);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,289,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -14919,7 +14919,7 @@ public class JdScriptQuerySqlParser extends Parser {
 			setState(2277);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,300,_ctx);
-			while ( _alt!=2 && _alt!=ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{

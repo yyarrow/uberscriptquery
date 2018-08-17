@@ -62,7 +62,7 @@ configSetting
     : SET qualifiedName EQ constant ';'
     ;
 statementAssignment_udf
-    : 'MAP' | 'EXLUDE' | 'FILTER'  #udfName
+    : 'MAP' | 'EXCLUDE' | 'FILTER'  #udfName
     ;
 statementAssignment_param
     : IDENTIFIER

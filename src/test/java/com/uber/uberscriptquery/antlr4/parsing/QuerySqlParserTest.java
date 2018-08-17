@@ -18,13 +18,18 @@ package com.uber.uberscriptquery.antlr4.parsing;
 
 import com.uber.uberscriptquery.util.ResourceUtils;
 import junit.framework.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuerySqlParserTest {
+    @Rule
+    public ExpectedException thrown= ExpectedException.none();
+
     @Test
     public void test_parseRootStatement_load_from_QueryFile001() throws IOException {
         String text = ResourceUtils.readResource(this.getClass(), "QueryFile001.txt");
@@ -224,11 +229,15 @@ public class QuerySqlParserTest {
     @Test
     public void test_parseRootStatement_variable_assignment_and_statement_assignment() throws IOException {
         {
-            String query = "v1 = 'abc'; t1 = select a,b,c from source1; t2 = select ${v1} from source2; result = select a, c from t1 t1;";
+            String query = "v1 = 'abc'; t1 = select a,b,c from source1; " +
+                    "t2 = select ${v1} from source2; result = select a, c from t1 t1; " +
+                    "result1 = map track from result; " +
+                    "result2 = exclude column1 column2 from result; " +
+                    "result3 = filter f1 from result; ";
 
             QuerySqlParser parser = new QuerySqlParser();
             RootStatement rootStatement = parser.parseRootStatement(query);
-            Assert.assertEquals(3, rootStatement.getStatementAssignments().size());
+            Assert.assertEquals(6, rootStatement.getStatementAssignments().size());
 
             StatementAssignment statementAssignment = rootStatement.getStatementAssignments().get(0);
             Assert.assertEquals("t1", statementAssignment.getTableAlias());
@@ -241,8 +250,44 @@ public class QuerySqlParserTest {
             Assert.assertEquals(null, statementAssignment.getQueryType());
             Assert.assertEquals(null, statementAssignment.getQueryEngine());
             Assert.assertEquals("select abc from source2", statementAssignment.getQueryText());
+
+            //udf test
+            statementAssignment = rootStatement.getStatementAssignments().get(3);
+            Assert.assertEquals("result1", statementAssignment.getTableAlias());
+            Assert.assertEquals(null, statementAssignment.getQueryType());
+            Assert.assertEquals(null, statementAssignment.getQueryEngine());
+            Assert.assertEquals("map track from result", statementAssignment.getQueryText());
+            Assert.assertEquals("map", ((UdfStatementAssigment)statementAssignment).getUdfName());
+            Assert.assertEquals("track", ((UdfStatementAssigment)statementAssignment).getParams().get(0));
+            Assert.assertEquals("result", ((UdfStatementAssigment)statementAssignment).getSourceTableAlias());
+
+            statementAssignment = rootStatement.getStatementAssignments().get(4);
+            Assert.assertEquals("result2", statementAssignment.getTableAlias());
+            Assert.assertEquals(null, statementAssignment.getQueryType());
+            Assert.assertEquals(null, statementAssignment.getQueryEngine());
+            Assert.assertEquals("exclude column1 column2 from result", statementAssignment.getQueryText());
+            Assert.assertEquals("exclude", ((UdfStatementAssigment)statementAssignment).getUdfName());
+            Assert.assertEquals("column1", ((UdfStatementAssigment)statementAssignment).getParams().get(0));
+            Assert.assertEquals("column2", ((UdfStatementAssigment)statementAssignment).getParams().get(1));
+            Assert.assertEquals("result", ((UdfStatementAssigment)statementAssignment).getSourceTableAlias());
+
+            statementAssignment = rootStatement.getStatementAssignments().get(5);
+            Assert.assertEquals("result3", statementAssignment.getTableAlias());
+            Assert.assertEquals(null, statementAssignment.getQueryType());
+            Assert.assertEquals(null, statementAssignment.getQueryEngine());
+            Assert.assertEquals("filter f1 from result", statementAssignment.getQueryText());
+            Assert.assertEquals("filter", ((UdfStatementAssigment)statementAssignment).getUdfName());
+            Assert.assertEquals("f1", ((UdfStatementAssigment)statementAssignment).getParams().get(0));
+            Assert.assertEquals("result", ((UdfStatementAssigment)statementAssignment).getSourceTableAlias());
+
+            //error test
+            query = "result = sql engine1 map track from source;";
+            thrown.expect(RuntimeException.class);
+            thrown.expectMessage("Error: queryType:sql can't use udf");
+             parser.parseRootStatement(query);
         }
     }
+
 
     @Test
     public void test_parseRootStatement_with_variableOverwrite() throws IOException {
@@ -353,9 +398,9 @@ public class QuerySqlParserTest {
 
             Assert.assertEquals("t1", rootStatement.getJsonQueryStatementAssignments().get(0).getTableAlias());
             Assert.assertEquals("engine1", rootStatement.getJsonQueryStatementAssignments().get(0).getQueryEngine());
-            Assert.assertEquals(1, rootStatement.getJsonQueryStatementAssignments().get(0).getQueryConfig().size());
-            Assert.assertEquals("http://server/api", rootStatement.getJsonQueryStatementAssignments().get(0).getQueryConfig().get("url"));
-            Assert.assertEquals("{'query': '...'}", rootStatement.getJsonQueryStatementAssignments().get(0).getQueryStatement());
+            Assert.assertEquals(1, ((StanderStatementAssigment)(rootStatement.getJsonQueryStatementAssignments().get(0))).getQueryConfig().size());
+            Assert.assertEquals("http://server/api", ((StanderStatementAssigment)(rootStatement.getJsonQueryStatementAssignments().get(0))).getQueryConfig().get("url"));
+            Assert.assertEquals("{'query': '...'}", ((StanderStatementAssigment)(rootStatement.getJsonQueryStatementAssignments().get(0))).getQueryStatement());
         }
     }
 }
