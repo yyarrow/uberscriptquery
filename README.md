@@ -104,3 +104,8 @@ Future Work
 1. Support more data sources, e.g. Cassandra and Elasticsearch.
 
 2. Support "upsert" into more databases like PostgreSQL. Now it only supports MySQL and H2 database.
+
+
+g4 build way
+============
+java -jar antlr-4.5.3-complete.jar -visitor -listener ../JdScriptQuerySql.g4
