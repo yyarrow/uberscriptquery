@@ -210,6 +210,7 @@ public class SparkUtils {
             result.getRows().add(values);
         }
 
+        result.setDf(df);
         return result;
     }
 

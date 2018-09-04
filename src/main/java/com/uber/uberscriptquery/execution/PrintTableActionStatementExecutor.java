@@ -32,6 +32,9 @@ public class PrintTableActionStatementExecutor implements ActionStatementExecuto
 
         DataSetResult dataSetResult = SparkUtils.getTableData(sparkSession, tableName);
         System.out.println("------------------------------");
+        System.out.println("Schema: " + tableName);
+        dataSetResult.getDf().printSchema();
+        System.out.println("------------------------------");
         System.out.println("Table: " + tableName);
         dataSetResult.print();
         System.out.println("------------------------------");

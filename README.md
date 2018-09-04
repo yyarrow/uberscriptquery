@@ -109,3 +109,11 @@ Future Work
 g4 build way
 ============
 java -jar antlr-4.5.3-complete.jar -visitor -listener ../JdScriptQuerySql.g4
+
+jar build way
+============
+mvn package -DskipTests
+
+add to local repository
+============
+mvn install:install-file -Dfile=UberScriptQuery-1.1.01.jar -DgroupId=com.uber -DartifactId=UberScriptQuery -Dversion=1.1.01 -Dpackaging=jar

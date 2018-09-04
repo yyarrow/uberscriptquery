@@ -17,6 +17,8 @@
 package com.uber.uberscriptquery.jdbc;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,15 @@ import java.util.List;
 public class DataSetResult {
     private List<String> columnNames = new ArrayList<>();
     private List<List<Object>> rows = new ArrayList<>();
+    private Dataset<Row> df;
+
+    public void setDf(Dataset<Row> df){
+        this.df = df;
+    }
+
+    public Dataset<Row> getDf(){
+        return df;
+    }
 
     public List<String> getColumnNames() {
         return columnNames;

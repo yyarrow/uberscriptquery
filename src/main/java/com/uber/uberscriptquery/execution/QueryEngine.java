@@ -131,6 +131,8 @@ public class QueryEngine implements Serializable {
     public void executeScript(String query, String queryOverwrite, SparkSession spark, boolean debug) throws RuntimeException{
         QuerySqlParser parser = new QuerySqlParser();
 
+        System.out.println(logger.getName());
+
         logger.info("Parsing query statement: " + query);
         RootStatement rootStatement = parser.parse(query, queryOverwrite).getRootStatement();
 
@@ -247,7 +249,16 @@ public class QueryEngine implements Serializable {
                 df = df.persist(StorageLevel.MEMORY_AND_DISK_SER());
             }
 
-            // TODO save debug info/data
+            // TODO use logger
+            System.out.println();
+            System.out.println(tableAlias+" Information:");
+            System.out.println("------------------------------------------------");
+            System.out.println("schema:");
+            df.printSchema();
+            System.out.println("------------------------------------------------");
+            System.out.println("sample:");
+            df.show(10, false);
+            System.out.println("------------------------------------------------");
         }
     }
 }
